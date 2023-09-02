@@ -32,7 +32,7 @@ class UserManager(BaseUserManager):
             raise ValueError(_('User with this Email already exists.'))
 
         user = self.model(email=email, nickname=nickname, birthdate=birthdate, **extra_fields)
-        user.se_password(password)
+        user.set_password(password)
         user.save()
         return user
     
