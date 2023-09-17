@@ -23,7 +23,7 @@ class Recipe(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     time = models.IntegerField()
-    difficulty = models.IntegerField(choices=(1, 2, 3, 4, 5))
+    difficulty = models.IntegerField(choices=((1, 1), (2, 2), (3, 3), (4, 4), (5, 5)))
     ingredients = models.ManyToManyField(Ingredient, through="RecipeIngredient")
 
 

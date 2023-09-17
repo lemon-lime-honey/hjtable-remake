@@ -30,6 +30,9 @@ class UserManager(BaseUserManager):
 
         if get_user_model().objects.filter(email=email):
             raise ValueError(_('User with this Email already exists.'))
+        
+        if get_user_model().objects.filter(nickname=nickname):
+            raise ValueError(_('User with this nickname already exists.'))
 
         user = self.model(email=email, nickname=nickname, birthdate=birthdate, **extra_fields)
         user.set_password(password)
