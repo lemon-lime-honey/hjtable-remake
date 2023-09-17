@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from .serializers import *
 
 
-class signupAPIView(APIView):
+class SignupAPIView(APIView):
     http_method_names = ['post']
     permission_classes = (permissions.AllowAny,)
 
