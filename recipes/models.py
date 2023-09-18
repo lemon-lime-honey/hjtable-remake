@@ -32,7 +32,7 @@ class Recipe(models.Model):
 
 
 class RecipeStep(models.Model):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='step')
     detail = models.TextField()
 
 
