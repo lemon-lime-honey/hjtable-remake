@@ -2,12 +2,6 @@ from rest_framework.serializers import ModelSerializer
 from .models import *
 
 
-class IngredientSerializer(ModelSerializer):
-    class Meta:
-        model = Ingredient
-        fields = ('name',)
-
-
 class RecipeIngredientSerializer(ModelSerializer):
     class Meta:
         model = RecipeIngredient
@@ -95,6 +89,7 @@ class RecipeSerializer(ModelSerializer):
                 ri.save()
             else:
                 ri.delete()
+            index += 1
 
         if index < len(ingredients):
             for i in range(index, len(ingredients)):
