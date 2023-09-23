@@ -35,7 +35,10 @@ class RecipeSerializer(ModelSerializer):
     def create(self, validated_data):
         steps = validated_data.pop('step')
         ingredients = validated_data.pop('recipeingredient')
-        recipe = Recipe.objects.create(**validated_data)
+        recipe = Recipe.objects.create(
+            **validated_data,
+            user=self.context.get('request').user
+        )
 
         for step in steps:
             RecipeStep.objects.create(recipe=recipe, detail=step['detail'])
