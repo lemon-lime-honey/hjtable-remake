@@ -54,10 +54,54 @@ class RecipeSerializer(ModelSerializer):
 
 
     def update(self, instance, validated_data):
-        steps = validated_data.pop('step')
-        ingredients = validated_data.pop('recipeingredient')
-        original_steps = RecipeStep.objects.filter(recipe=instance)
-        original_ingredients = RecipeIngredient.objects.filter(recipe=instance)
+        if self.partial:
+            if 'step' in self.initial_data:
+                validated_data['step'] = self.initial_data['step']
+            if 'recipeingredient' in self.initial_data:
+                validated_data['recipeingredient'] = self.initial_data['recipeingredient']
+
+        if 'step' in validated_data:
+            steps = validated_data.pop('step')
+            original_steps = RecipeStep.objects.filter(recipe=instance)
+
+            index = 0
+
+            for st in original_steps:
+                if index < len(steps):
+                    st.detail = steps[index]['detail']
+                    st.save()
+                else:
+                    st.delete()
+                index += 1
+
+            if index < len(steps):
+                for i in range(index, len(steps)):
+                    RecipeStep.objects.create(
+                        recipe=instance,
+                        detail=steps[i]['detail']
+                    )
+
+        if 'recipeingredient' in validated_data:
+            ingredients = validated_data.pop('recipeingredient')
+            original_ingredients = RecipeIngredient.objects.filter(recipe=instance)
+            index = 0
+
+            for ri in original_ingredients:
+                if index < len(ingredients):
+                    ri.ingredient = ingredients[index]['ingredient']
+                    ri.quantity = ingredients[index]['quantity']
+                    ri.save()
+                else:
+                    ri.delete()
+                index += 1
+
+            if index < len(ingredients):
+                for i in range(index, len(ingredients)):
+                    RecipeIngredient.objects.create(
+                        recipe=instance,
+                        ingredient=ingredients[i]['ingredient'],
+                        quantity=ingredients[i]['quantity']
+                    )
 
         instance.title = validated_data.get('title', instance.title)
         instance.content = validated_data.get('content', instance.content)
@@ -65,41 +109,5 @@ class RecipeSerializer(ModelSerializer):
         instance.time = validated_data.get('time', instance.time)
         instance.difficulty = validated_data.get('difficulty', instance.difficulty)
         instance.save()
-
-        index = 0
-
-        for st in original_steps:
-            if index < len(steps):
-                st.detail = steps[index]['detail']
-                st.save()
-            else:
-                st.delete()
-            index += 1
-
-        if index < len(steps):
-            for i in range(index, len(steps)):
-                RecipeStep.objects.create(
-                    recipe=instance,
-                    detail=steps[i]['detail']
-                )
-
-        index = 0
-
-        for ri in original_ingredients:
-            if index < len(ingredients):
-                ri.ingredient = ingredients[index]['ingredient']
-                ri.quantity = ingredients[index]['quantity']
-                ri.save()
-            else:
-                ri.delete()
-            index += 1
-
-        if index < len(ingredients):
-            for i in range(index, len(ingredients)):
-                RecipeIngredient.objects.create(
-                    recipe=instance,
-                    ingredient=ingredients[i]['ingredient'],
-                    quantity=ingredients[i]['quantity']
-                )
 
         return instance
