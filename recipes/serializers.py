@@ -111,3 +111,23 @@ class RecipeSerializer(ModelSerializer):
         instance.save()
 
         return instance
+
+
+class RecipeReviewSerializer(ModelSerializer):
+    class Meta:
+        model = RecipeReview
+        fields = ('content',)
+
+
+    def create(self, validated_data):
+        recipe = Recipe.objects.get(
+            pk=self.context.get('request').path.split('/')[2]
+        )
+        user = self.context.get('request').user
+        review = RecipeReview.objects.create(
+            recipe=recipe,
+            user=user,
+            content=validated_data.get('content')
+        )
+
+        return review

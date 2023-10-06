@@ -1,4 +1,3 @@
-from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from .models import *
 from .serializers import *
@@ -31,3 +30,12 @@ class RecipeViewSet(ModelViewSet):
     def update(self, request, *args, **kwargs):
         request = self.new_ingredient(request)
         return super().update(request, *args, **kwargs)
+
+
+class RecipeReviewViewSet(ModelViewSet):
+    serializer_class = RecipeReviewSerializer
+    queryset = RecipeReview.objects.all()
+
+
+    def get_queryset(self):
+        return super().get_queryset().filter(recipe=self.kwargs.get('recipe_pk'))

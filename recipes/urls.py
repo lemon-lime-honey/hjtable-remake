@@ -4,6 +4,7 @@ from .views import *
 
 router = DefaultRouter()
 router.register(r'', RecipeViewSet)
+router.register(r'(?P<recipe_pk>\d+)/reviews', RecipeReviewViewSet)
 urlpatterns = [
     path('', include(router.urls)),
 ]
