@@ -39,3 +39,8 @@ class UserUpdateView(UpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class UserDeleteView(DestroyAPIView):
+    def get_object(self):
+        return self.request.user
