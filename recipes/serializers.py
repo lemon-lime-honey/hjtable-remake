@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.serializers import ModelSerializer
 from .models import *
 
@@ -120,7 +121,8 @@ class RecipeReviewSerializer(ModelSerializer):
 
 
     def create(self, validated_data):
-        recipe = Recipe.objects.get(
+        recipe = get_object_or_404(
+            Recipe,
             pk=self.context.get('request').path.split('/')[2]
         )
         user = self.context.get('request').user

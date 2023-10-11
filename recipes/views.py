@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.viewsets import ModelViewSet
 from .models import *
 from .serializers import *
@@ -38,4 +39,5 @@ class RecipeReviewViewSet(ModelViewSet):
 
 
     def get_queryset(self):
-        return super().get_queryset().filter(recipe=self.kwargs.get('recipe_pk'))
+        recipe = get_object_or_404(Recipe, pk=self.kwargs.get('recipe_pk'))
+        return super().get_queryset().filter(recipe=recipe)
